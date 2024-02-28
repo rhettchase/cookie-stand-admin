@@ -2,7 +2,28 @@ import Head from 'next/head';
 import { useState } from 'react';
 
 export default function Home() {
-  const [location, setLocation] = useState("add location..")
+  const [location, setLocation] = useState("")
+  const [min_customers, setMinCustomers] = useState(0)
+  const [max_customers, setMaxCustomers] = useState(0)
+  const [avg_cookies, setAvgCookies] = useState(0)
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  function formSubmitHandler(event) {
+    event.preventDefault();
+    const newLocation = event.target.location.value; 
+    const newMinCustomers = parseFloat(event.target.min_customers.value);
+    const newMaxCustomers = parseFloat(event.target.max_customers.value);
+    const newAvgCookies = parseFloat(event.target.avg_cookies.value);
+
+    setLocation(newLocation);
+    setMinCustomers(newMinCustomers);
+    setMaxCustomers(newMaxCustomers);
+    setAvgCookies(newAvgCookies);
+    setFormSubmitted(true);
+
+    event.target.reset();
+};
+
   return (
     <div>
       <Head>
@@ -11,8 +32,12 @@ export default function Home() {
       </Head>
       <Header />
       <main>
-        <StandForm />
-        <Report />
+        <StandForm onSubmit={formSubmitHandler}/>
+        {
+          formSubmitted ?
+          <Report location={location} min_customers={min_customers} max_customers={max_customers} avg_cookies={avg_cookies} /> :
+          <p className="text-xs text-center text-gray-400">Report table coming soon...</p> // Add styling as needed
+        }
       </main>
       <Footer />
     </div>
@@ -27,15 +52,15 @@ function Header() {
   );
 }
 
-function StandForm() {
+function StandForm( { onSubmit } ) {
   return (
-    <form className="w-full max-w-lg p-2 mx-auto my-4 text-sm bg-green-300">
+    <form onSubmit={ onSubmit } className="w-full max-w-lg p-2 mx-auto my-4 text-sm bg-green-300 rounded-lg">
       <div className="flex flex-wrap items-center mb-6 -mx-3">
         <label className="w-1/4 px-3 text-xs text-center text-black" htmlFor="location">
           Location
         </label>
         <div className="w-3/4 px-3">
-          <input type="text" className="w-full" id="location" />
+          <input type="text" className="w-full" name="location" />
         </div>
       </div>
       <div className="flex items-center mb-6 -mx-3">
@@ -44,7 +69,7 @@ function StandForm() {
             <label className="block mb-2 text-xs text-center text-black" htmlFor="min_customers">
               Minimum Customers per Hour
             </label>
-            <input type="number" className="w-full" id="min_customers" step="0.01" />
+            <input type="number" className="w-full" name="min_customers" />
           </div>
         </div>
         <div className="flex-1 px-3">
@@ -52,7 +77,7 @@ function StandForm() {
             <label className="block mb-2 text-xs text-center text-black" htmlFor="max_customers">
               Maximum Customers per Hour
             </label>
-            <input type="number" className="w-full" id="max_customers" step="0.01" />
+            <input type="number" className="w-full" name="max_customers" />
           </div>
         </div>
         <div className="flex-1 px-3">
@@ -60,7 +85,7 @@ function StandForm() {
             <label className="block mb-2 text-xs text-center text-black" htmlFor="avg_cookies">
               Average Cookies per Sale
             </label>
-            <input type="number" className="w-full" id="avg_cookies" step="0.01" />
+            <input type="number" className="w-full" name="avg_cookies" />
           </div>
         </div>
         <div className="px-3">
@@ -75,8 +100,17 @@ function StandForm() {
 
 
 
-function Report() {
-  return <></>;
+function Report({ location, min_customers, max_customers, avg_cookies }) {
+  const lastCreated = JSON.stringify({
+    location,
+    min_customers,
+    max_customers,
+    avg_cookies,
+  }, null, 2); // Pretty print the JSON string
+
+  return (
+    <pre>{lastCreated}</pre> // Use <pre> for formatted display
+  );
 }
 
 function Footer() {
