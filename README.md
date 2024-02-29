@@ -1,10 +1,10 @@
-# LAB - Class 37
+# LAB - Class 38
 
-## Project: Leveling up Front End with React, Next.js & TailwindCSS
+## Project: Cookie Stand Admin Version 2
 
 ### Project Description
 
-Cookie stand admin app created using Next.js and styled using Tailwind CSS.
+Cookie stand admin app created using Next.js and styled using Tailwind CSS. The app is componetized, with the index.js returning the top level component and the CookieStandAdmin containing the remaining components. The reports table is rendered based on the form input.
 
 ### Author: Rhett Chase
 
