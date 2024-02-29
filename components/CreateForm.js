@@ -1,6 +1,23 @@
-export default function StandForm( { onSubmit } ) {
+import { hours } from '@/data';
+
+export default function CreateForm( { onCreate } ) {
+    
+    function handleSubmit(event) {
+      event.preventDefault();
+      onCreate({
+        id: event.target.location.value,
+        location: event.target.location.value,
+        min_customers: parseFloat(event.target.min_customers.value),
+        max_customers: parseFloat(event.target.max_customers.value),
+        avg_cookies: parseFloat(event.target.avg_cookies.value),
+        hourly_sales: [48, 42, 30, 24, 42, 24, 36, 42, 42, 48, 36, 42, 24, 36],
+      });
+
+      event.target.reset();
+  };
+  
     return (
-      <form onSubmit={ onSubmit } className="w-full max-w-lg p-2 mx-auto my-4 text-sm bg-green-300 rounded-lg">
+      <form onSubmit={ handleSubmit } className="w-full max-w-lg p-2 mx-auto my-4 text-sm bg-green-300 rounded-lg">
         <div className="flex flex-wrap items-center mb-6 -mx-3">
           <label className="w-1/4 px-3 text-xs text-center text-black" htmlFor="location">
             Location
