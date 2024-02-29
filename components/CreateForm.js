@@ -27,7 +27,7 @@ export default function CreateForm( { onCreate } ) {
           </div>
         </div>
         <div className="flex items-center mb-6 -mx-3">
-          <div className="flex-1 px-3">
+          <div className="flex-1 px-3 mx-2 bg-green-200">
             <div className="mb-6">
               <label className="block mb-2 text-xs text-center text-black" htmlFor="min_customers">
                 Minimum Customers per Hour
@@ -35,7 +35,7 @@ export default function CreateForm( { onCreate } ) {
               <input type="number" className="w-full" name="min_customers" />
             </div>
           </div>
-          <div className="flex-1 px-3">
+          <div className="flex-1 px-3 mx-2 bg-green-200">
             <div className="mb-6">
               <label className="block mb-2 text-xs text-center text-black" htmlFor="max_customers">
                 Maximum Customers per Hour
@@ -43,7 +43,7 @@ export default function CreateForm( { onCreate } ) {
               <input type="number" className="w-full" name="max_customers" />
             </div>
           </div>
-          <div className="flex-1 px-3">
+          <div className="flex-1 px-3 mx-2 bg-green-200">
             <div className="mb-6">
               <label className="block mb-2 text-xs text-center text-black" htmlFor="avg_cookies">
                 Average Cookies per Sale
