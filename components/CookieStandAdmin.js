@@ -27,7 +27,7 @@ export default function CookieStandAdmin() {
         <CreateForm onCreate={handleCreate} />
         <ReportTable stands={resources || []} deleteStand={deleteResource} />
       </main>
-      <Footer locationsCount={resources.length}/>
+      <Footer locationsCount={resources?.length ?? 0}/>
     </div>
   );
 }
