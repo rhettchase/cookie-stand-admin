@@ -1,94 +1,57 @@
-export default function ReportTable(props) {
+export default function ReportTable({ stands, deleteStand }) {
 
-  if (props.reports.length === 0) {
-      return <h2 className="mt-8 text-sm text-center text-gray-800">No Cookie Stands Available</h2>;
-  }
-  const headers = ['Location', ...props.hours, 'Totals'];
+    return (
+        <table className="my-8">
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>6 am</th>
+                    <th>7 am</th>
+                    <th>8 am</th>
+                    <th>9 am</th>
+                    <th>10 am</th>
+                    <th>11 am</th>
+                    <th>12 pm</th>
+                    <th>1 pm</th>
+                    <th>2 pm</th>
+                    <th>3 pm</th>
+                    <th>4 pm</th>
+                    <th>5 pm</th>
+                    <th>6 pm</th>
+                    <th>7 pm</th>
+                    <th>totals</th>
+                </tr>
+            </thead>
+            <tbody>
+                {stands.map(stand => (
 
-  return (
-      <table className="w-2/3 mx-auto my-8 text-sm bg-green-300 rounded-lg">
-          <HeaderRow headerValues={headers} />
-
-          <tbody>
-              {props.reports.map(report => {
-                  return <ReportRow key={report.id} report={report} />;
-              })}
-          </tbody>
-
-          <FooterRow reports={props.reports} />
-
-      </table>
-  );
+                    <CookieStandRow key={stand.id} info={stand} deleteStand={deleteStand} />
+                ))}
+            </tbody>
+        </table>
+    );
 }
 
-function HeaderRow({ headerValues }) {
-  return (
-      <thead className="bg-green-500">
-          <tr>
-              {headerValues.map((header, index) => {
-                  let className = "";
-                  if (index === 0) {
-                      className = "rounded-tl";
-                  } else if (index === headerValues.length - 1) {
-                      className = "rounded-tr";
-                  }
-                  return <th className={className} key={header}>{header}</th>;
-              })}
-          </tr>
-      </thead>
-  );
+function CookieStandRow({ info, deleteStand }) {
+
+    function clickHandler() {
+        deleteStand(info.id);
+    }
+
+    if (info.hourly_sales.length == 0) {
+        // bunk data
+        info.hourly_sales = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    }
+
+    return (
+        <tr>
+            <td>{info.location} <button onClick={clickHandler}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+</svg>
+</button></td>
+            {info.hourly_sales.map((slot,index) => <td key={index}>{slot}</td>)}
+            <td>{info.hourly_sales.reduce((num, sum) => num + sum, 0)}</td>
+        </tr>
+    );
 }
 
-function ReportRow({ report }) {
-
-  const total = report.hourly_sales.reduce((sum, value) => sum + value);
-
-  const values = [report.location, ...report.hourly_sales, total];
-
-  return (
-
-      <tr className="odd:bg-green-400">
-          {values.map((value, i) => <td className="pl-4 border border-green-900" key={i}>{value}</td>)}
-      </tr>
-  );
-}
-
-function FooterRow({ reports }) {
-
-  const cellValues = ['Totals'];
-
-  let megaTotal = 0;
-
-  for (let i in reports[0].hourly_sales) {
-
-      let hourlyTotal = 0;
-
-      for (let report of reports) {
-          hourlyTotal += report.hourly_sales[i];
-      }
-
-      cellValues.push(hourlyTotal);
-
-      megaTotal += hourlyTotal;
-  }
-
-  cellValues.push(megaTotal);
-
-  return (
-      <tfoot className="bg-green-500">
-          <tr>
-              {cellValues.map((value, index) => {
-                  let className = "border border-green-900";
-
-                  if (index === 0) {
-                      className += " rounded-bl";
-                  } else if (index === cellValues.length - 1) {
-                      className += " rounded-br";
-                  }
-
-                  return <th className={className} key={index}>{value}</th>;
-              })}
-          </tr>
-      </tfoot>
-  );
-}

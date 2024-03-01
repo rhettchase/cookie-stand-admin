@@ -1,20 +1,24 @@
+import { useAuth } from '../contexts/auth';
+import useResource from '../hooks/useResource';
 import { hours } from '@/data';
 
 export default function CreateForm( { onCreate } ) {
     
-    function handleSubmit(event) {
-      event.preventDefault();
-      onCreate({
-        id: event.target.location.value,
-        location: event.target.location.value,
-        min_customers: parseFloat(event.target.min_customers.value),
-        max_customers: parseFloat(event.target.max_customers.value),
-        avg_cookies: parseFloat(event.target.avg_cookies.value),
-        hourly_sales: [48, 42, 30, 24, 42, 24, 36, 42, 42, 48, 36, 42, 24, 36],
-      });
+    const { user } = useAuth();
+    const { createResource } = useResource();
 
-      event.target.reset();
-  };
+    function handleSubmit(event) {
+        event.preventDefault();
+        const info = {
+            location: event.target.location.value,
+            minimum_customers_per_hour: parseInt(event.target.minimum.value),
+            maximum_customers_per_hour: parseInt(event.target.maximum.value),
+            average_cookies_per_sale: parseFloat(event.target.average.value),
+            owner: user.id,
+        };
+        createResource(info);
+        event.target.reset();
+    }
   
     return (
       <form onSubmit={ handleSubmit } className="w-full max-w-lg p-2 mx-auto my-4 text-sm bg-green-300 rounded-lg">
@@ -29,26 +33,26 @@ export default function CreateForm( { onCreate } ) {
         <div className="flex items-center mb-6 -mx-3">
           <div className="flex-1 px-3 mx-2 bg-green-200">
             <div className="mb-6">
-              <label className="block mb-2 text-xs text-center text-black" htmlFor="min_customers">
+              <label className="block mb-2 text-xs text-center text-black" htmlFor="minimum">
                 Minimum Customers per Hour
               </label>
-              <input type="number" className="w-full" name="min_customers" />
+              <input type="number" className="w-full" name="minimum" />
             </div>
           </div>
           <div className="flex-1 px-3 mx-2 bg-green-200">
             <div className="mb-6">
-              <label className="block mb-2 text-xs text-center text-black" htmlFor="max_customers">
+              <label className="block mb-2 text-xs text-center text-black" htmlFor="maximum">
                 Maximum Customers per Hour
               </label>
-              <input type="number" className="w-full" name="max_customers" />
+              <input type="number" className="w-full" name="maximum" />
             </div>
           </div>
           <div className="flex-1 px-3 mx-2 bg-green-200">
             <div className="mb-6">
-              <label className="block mb-2 text-xs text-center text-black" htmlFor="avg_cookies">
+              <label className="block mb-2 text-xs text-center text-black" htmlFor="average">
                 Average Cookies per Sale
               </label>
-              <input type="number" className="w-full" name="avg_cookies" step="0.1"/>
+              <input type="number" className="w-full" name="average" step="0.1"/>
             </div>
           </div>
           <div className="px-3">
